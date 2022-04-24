@@ -15,19 +15,18 @@ exports.getAllUsers = (req, res) => {
 
 }
 
-// def singup(email: str, name: str) {
-//  
-//}
-
 exports.signup = (req, res) => {
-    console.log(req.body.email);
+    //console.log(req.body.email);
     db.query("SELECT `id`, `email`, `name` FROM `users` WHERE `email` = '" +req.body.email+ "'", (error, rows, fields) => {
-        console.log(error, rows);
+        //console.log(error, rows);
         if(error) {
             response.status(400, error, res)
         } else if(typeof rows !== 'undefined' && rows.length > 0){
-            console.log(rows);
-            response.status(404, 'No', res)
+            const row = JSON.parse(JSON.stringify(rows))
+            row.map(rw => {
+                response.status(302, {message: `Пользователь с таким email - ${rw.email} уже зарегстрирован!`}, res)
+                return true
+            })
         } else {
             response.status(200, 'Reg', res)
         }
