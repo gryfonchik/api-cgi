@@ -1,5 +1,7 @@
 'use strict'
 
+const bcrypt = require('bcryptjs')
+
 const response = require('../response')
 const db = require('../settings/db')
 
@@ -12,7 +14,6 @@ exports.getAllUsers = (req, res) => {
             response.status(200, rows, res)
         }
     })
-
 }
 
 exports.signup = (req, res) => {
@@ -28,7 +29,24 @@ exports.signup = (req, res) => {
                 return true
             })
         } else {
-            response.status(200, 'Reg', res)
+            const email = req.body.email
+            const name = req.body.name
+            const contacts = req.body.email
+            const ava = "kartinka"
+            const info = ""
+            const role = req.body.role
+            
+            const salt = bcrypt.genSaltSync(15)
+            const password = bcrypt.hashSync(req.body.password, salt)
+            
+            const sql = "INSERT INTO `users`(`name`, `email`, `password`, `contacts`, `info`, `ava`, `role`) VALUES('" + name + "', '" + email + "', '" + password + "', '" + contacts + "', '" + info + "', '" + ava + "', '" + role + "')";
+            db.query(sql, (error, results) => {
+                if(error) {
+                    response.status(400, error, res)
+                } else {
+                    response.status(200, {message: `Регистрация прошла успешно.`, results}, res)
+                }
+            })
         }
     })
     

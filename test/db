@@ -1,0 +1,57 @@
+CREATE TABLE `users` (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`name` varchar(100) NOT NULL,
+	`email` varchar(100) NOT NULL,
+	`password` varchar(100) NOT NULL,
+	`contacts` varchar(255) NOT NULL,
+	`info` varchar(255) NOT NULL,
+	`ava` varchar(255) NOT NULL,
+	`role` INT NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `portfolio` (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`player_id` INT NOT NULL,
+	`file` varchar(255) NOT NULL,
+	`info` varchar(255) NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `task` (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`player_id` INT NOT NULL,
+	`client_id` INT NOT NULL,
+	`title` varchar(255) NOT NULL,
+	`info` varchar(500) NOT NULL,
+	`type` varchar(50) NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `archive` (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`task_id` INT NOT NULL,
+	`title` varchar(225) NOT NULL,
+	`info` varchar(500) NOT NULL,
+	`type` varchar(50) NOT NULL,
+	`file` varchar(250) NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `status` (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`task_id` INT NOT NULL,
+	`player_stat` varchar(255) NOT NULL,
+	`client_stat` varchar(255) NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+ALTER TABLE `portfolio` ADD CONSTRAINT `portfolio_fk0` FOREIGN KEY (`player_id`) REFERENCES `users`(`id`);
+
+ALTER TABLE `task` ADD CONSTRAINT `task_fk0` FOREIGN KEY (`player_id`) REFERENCES `users`(`id`);
+
+ALTER TABLE `task` ADD CONSTRAINT `task_fk1` FOREIGN KEY (`client_id`) REFERENCES `users`(`id`);
+
+ALTER TABLE `archive` ADD CONSTRAINT `archive_fk0` FOREIGN KEY (`task_id`) REFERENCES `task`(`id`);
+
+ALTER TABLE `status` ADD CONSTRAINT `status_fk0` FOREIGN KEY (`task_id`) REFERENCES `task`(`id`);
