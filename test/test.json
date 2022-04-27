@@ -1,4 +1,6 @@
-[{
+[
+    
+{
     "email": "kazah2@mail.ru",
     "name": "text2",
     "password": "111111",
@@ -10,5 +12,21 @@
     "name": "text2",
     "password": "111111",
     "role": "1"
-}]
+},
+
+{
+    "client_id": "1",
+    "title": "title",
+    "info": "info2",
+    "type": "type2"
+},
+
+{
+    "client_id": "1",
+    "title": "title",
+    "info": "info2",
+    "type": "type2"
+}
+
+]
 

@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model archive {
+  id      Int    @id @default(autoincrement())
+  task_id Int
+  title   String @db.VarChar(225)
+  info    String @db.VarChar(500)
+  type    String @db.VarChar(50)
+  file    String @db.VarChar(250)
+  task    task   @relation(fields: [task_id], references: [id], onUpdate: Restrict, map: "archive_fk0")
+
+  @@index([task_id], map: "archive_fk0")
+}
+
+model portfolio {
+  id      Int    @id @default(autoincrement())
+  user_id Int
+  file    String @db.VarChar(255)
+  info    String @db.VarChar(255)
+  users   users  @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "portfolio_fk0")
+
+  @@index([user_id], map: "portfolio_fk0")
+}
+
+model status {
+  id          Int    @id @default(autoincrement())
+  task_id     Int
+  player_stat String @db.VarChar(255)
+  client_stat String @db.VarChar(255)
+  task        task   @relation(fields: [task_id], references: [id], onUpdate: Restrict, map: "status_fk0")
+
+  @@index([task_id], map: "status_fk0")
+}
+
+model task {
+  id                          Int       @id @default(autoincrement())
+  player_id                   Int?
+  client_id                   Int?
+  title                       String    @db.VarChar(255)
+  info                        String    @db.VarChar(500)
+  type                        String    @db.VarChar(50)
+  users_task_client_idTousers users?    @relation("task_client_idTousers", fields: [client_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "task_fk1")
+  users_task_player_idTousers users?    @relation("task_player_idTousers", fields: [player_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "task_fk0")
+  archive                     archive[]
+  status                      status[]
+
+  @@index([player_id], map: "task_fk0")
+  @@index([client_id], map: "task_fk1")
+}
+
+model users {
+  id                         Int         @id @default(autoincrement())
+  name                       String      @db.VarChar(100)
+  email                      String      @db.VarChar(100)
+  password                   String      @db.VarChar(100)
+  contacts                   String      @db.VarChar(255)
+  type                       String      @db.VarChar(15)
+  info                       String?     @db.VarChar(255)
+  ava                        String      @db.VarChar(255)
+  role                       Int
+  portfolio                  portfolio[]
+  task_task_client_idTousers task[]      @relation("task_client_idTousers")
+  task_task_player_idTousers task[]      @relation("task_player_idTousers")
+}
